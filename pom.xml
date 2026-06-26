@@ -2072,6 +2072,21 @@
                 <argLine>--add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</argLine>
             </properties>
         </profile>
+        <!--
+      The iotdb-thingsboard-table module compiles with release 17 (it uses records and other
+      Java 17 language features) and integrates ThingsBoard storage SPIs. Following the connector
+      opt-in convention (cf. the with-springboot profile / iotdb-spring-boot-starter), it is wired
+      as an explicit, named profile rather than JDK-auto-activated, so a plain `mvn clean verify`
+      never pulls it into the reactor implicitly. CI builds and tests it on the JDK 17+ jobs by
+      passing `-P with-thingsboard` (see .github/workflows/compile-check.yml); the JDK 8/11 jobs
+      omit the flag and skip it.
+    -->
+        <profile>
+            <id>with-thingsboard</id>
+            <modules>
+                <module>iotdb-thingsboard-table</module>
+            </modules>
+        </profile>
         <profile>
             <id>with-springboot</id>
             <modules>
